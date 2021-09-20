@@ -1,0 +1,255 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+TP Différences Finies 2020 MOCA 2A
+\end_layout
+
+\begin_layout Section
+Algorithme du Gradient conjugué 
+\end_layout
+
+\begin_layout Subsection
+Cas-tests élémentaires
+\end_layout
+
+\begin_layout Standard
+Construire quelques exemples de systèmes linéaires 
+\begin_inset Formula $Ax=b$
+\end_inset
+
+ de petite taille où la matrice 
+\begin_inset Formula $A$
+\end_inset
+
+ est symétrique définie positive.
+ On pourra par exemple écrire 
+\begin_inset Formula $A=BB^{t}$
+\end_inset
+
+ avec 
+\begin_inset Formula $B$
+\end_inset
+
+ inversible ou encore choisir une matrice symétrique avec de grandes valeurs
+ positives sur la diagonale et des petites ailleurs.
+\end_layout
+
+\begin_layout Subsection
+Programmation
+\end_layout
+
+\begin_layout Standard
+Programmer la méthode du gradient conjugué pour résoudre les systèmes construits
+ précédemment.
+ On utilisera un test d'arrêt basé sur le résidu.
+\end_layout
+
+\begin_layout Section
+Différences finies pour le Laplacien 2D
+\end_layout
+
+\begin_layout Subsection
+Problème de la plaque
+\end_layout
+
+\begin_layout Standard
+Ecrire la méthode des différences finies pour résoudre l'équation 
+\begin_inset Formula 
+\[
+-\triangle u(x,y)=0
+\]
+
+\end_inset
+
+sur le domaine 
+\begin_inset Formula $D=[0,1]\times[0,1]$
+\end_inset
+
+ avec comme conditions aux bords de Dirichlet 
+\begin_inset Formula $u(x,1)=100$
+\end_inset
+
+ et 
+\begin_inset Formula $u(x,y)=0$
+\end_inset
+
+ sur les autres bords.
+ Résoudre le système obtenu à l'aide du gradient conjugué.
+ Le produit 
+\begin_inset Formula $Ad_{k}$
+\end_inset
+
+ sera calculé d'abord en ne tenant pas compte du caractère creux de la matrice,
+ puis en en tenant compte.
+ On comparera les temps de calculs en fonction du pas de discrétisation
+ 
+\begin_inset Formula $h$
+\end_inset
+
+ ainsi que l'erreur par rapport à la solution exacte.
+\end_layout
+
+\begin_layout Subsection
+Equation de Poisson
+\end_layout
+
+\begin_layout Standard
+Reprendre les questions précédentes pour l'équation
+\begin_inset Formula 
+\[
+-\triangle u(x,y)=-2\exp(x+y)
+\]
+
+\end_inset
+
+avec conditions aux limites de Dirichlet 
+\begin_inset Formula $u(x,y)=\exp(x+y).$
+\end_inset
+
+ On pourra noter que la solution de cette équation est 
+\begin_inset Formula $u(x,y)=\exp(x+y).$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Chaines de Markov pour le Laplacien 2D
+\end_layout
+
+\begin_layout Subsection
+Solution ponctuelle du problème de la plaque
+\end_layout
+
+\begin_layout Standard
+Construire un algorithme permettant de calculer la solution en un point
+ de la grille de pas 
+\begin_inset Formula $h$
+\end_inset
+
+ à l'aide de 
+\begin_inset Formula $N$
+\end_inset
+
+ simulations Monte-Carlo de la chaine de Markov associé.
+ Utiliser cet algorithme pour obtenir la solution en tout point.
+\end_layout
+
+\begin_layout Subsection
+Solution globale du problème de la plaque
+\end_layout
+
+\begin_layout Standard
+Construire un algorithme permettant un calcul de la solution globale de
+ l'équation en utilisant les états visités au cours des différentes trajectoires.
+ On choisira le point de départ au centre de la grille ou uniformément au
+ hasard dans la grille.
+ Comparer avec la méthode globale de la question 3.1.
+\end_layout
+
+\begin_layout Subsection
+Sequential Monte Carlo pour la plaque
+\end_layout
+
+\begin_layout Standard
+Programmer 
+\begin_inset Formula $k$
+\end_inset
+
+ étapes de la méthode Monte-Carlo séquentielle qui consiste à calculer le
+ résidu de l'équation par l'algorithme 3.2 et à le rajouter à l'approximation
+ à l'étape précédente.
+ Comparer avec l'algorithme 3.2 et au gradient conjugué du 2.1.
+\end_layout
+
+\begin_layout Subsection
+Sequential Monte Carlo pour le problème de Poisson
+\end_layout
+
+\begin_layout Standard
+Programmer 
+\begin_inset Formula $k$
+\end_inset
+
+ étapes de la méthode Monte-Carlo séquentielle et la comparer avec le gradient
+ conjugué.
+\end_layout
+
+\end_body
+\end_document

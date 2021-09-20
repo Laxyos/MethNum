@@ -1,0 +1,87 @@
+%% LyX 2.3.4.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[french]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\makeatletter
+\addto\extrasfrench{%
+   \providecommand{\og}{\leavevmode\flqq~}%
+   \providecommand{\fg}{\ifdim\lastskip>\z@\unskip\fi~\frqq}%
+}
+
+\makeatother
+\begin{document}
+\title{TP Différences Finies 2020 MOCA 2A}
+\maketitle
+
+\section{Algorithme du Gradient conjugué }
+
+\subsection{Cas-tests élémentaires}
+
+Construire quelques exemples de systèmes linéaires $Ax=b$ de petite
+taille où la matrice $A$ est symétrique définie positive. On pourra
+par exemple écrire $A=BB^{t}$ avec $B$ inversible ou encore choisir
+une matrice symétrique avec de grandes valeurs positives sur la diagonale
+et des petites ailleurs.
+
+\subsection{Programmation}
+
+Programmer la méthode du gradient conjugué pour résoudre les systèmes
+construits précédemment. On utilisera un test d'arrêt basé sur le
+résidu.
+
+\section{Différences finies pour le Laplacien 2D}
+
+\subsection{Problème de la plaque}
+
+Ecrire la méthode des différences finies pour résoudre l'équation
+\[
+-\triangle u(x,y)=0
+\]
+sur le domaine $D=[0,1]\times[0,1]$ avec comme conditions aux bords
+de Dirichlet $u(x,1)=100$ et $u(x,y)=0$ sur les autres bords. Résoudre
+le système obtenu à l'aide du gradient conjugué. Le produit $Ad_{k}$
+sera calculé d'abord en ne tenant pas compte du caractère creux de
+la matrice, puis en en tenant compte. On comparera les temps de calculs
+en fonction du pas de discrétisation $h$ ainsi que l'erreur par rapport
+à la solution exacte.
+
+\subsection{Equation de Poisson}
+
+Reprendre les questions précédentes pour l'équation
+\[
+-\triangle u(x,y)=-2\exp(x+y)
+\]
+avec conditions aux limites de Dirichlet $u(x,y)=\exp(x+y).$ On pourra
+noter que la solution de cette équation est $u(x,y)=\exp(x+y).$
+
+\section{Chaines de Markov pour le Laplacien 2D}
+
+\subsection{Solution ponctuelle du problème de la plaque}
+
+Construire un algorithme permettant de calculer la solution en un
+point de la grille de pas $h$ à l'aide de $N$ simulations Monte-Carlo
+de la chaine de Markov associé. Utiliser cet algorithme pour obtenir
+la solution en tout point.
+
+\subsection{Solution globale du problème de la plaque}
+
+Construire un algorithme permettant un calcul de la solution globale
+de l'équation en utilisant les états visités au cours des différentes
+trajectoires. On choisira le point de départ au centre de la grille
+ou uniformément au hasard dans la grille. Comparer avec la méthode
+globale de la question 3.1.
+
+\subsection{Sequential Monte Carlo pour la plaque}
+
+Programmer $k$ étapes de la méthode Monte-Carlo séquentielle qui
+consiste à calculer le résidu de l'équation par l'algorithme 3.2 et
+à le rajouter à l'approximation à l'étape précédente. Comparer avec
+l'algorithme 3.2 et au gradient conjugué du 2.1.
+
+\subsection{Sequential Monte Carlo pour le problème de Poisson}
+
+Programmer $k$ étapes de la méthode Monte-Carlo séquentielle et la
+comparer avec le gradient conjugué.
+\end{document}
