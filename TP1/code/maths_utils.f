@@ -1,20 +1,4 @@
-    
-      SUBROUTINE diag(D, n, m, A)
-      IMPLICIT NONE
-      INTEGER i, j, n, m, k
-      DOUBLE PRECISION D, A
-      DIMENSION D(1000, 1000), A(1000, 1000)
 
-      DO k=1,m
-        DO i = 1,n
-          DO j=1,n
-            A((k-1)*n+i, (k-1)*n+j) = D(i, j)
-          ENDDO
-        ENDDO
-
-      ENDDO
-      RETURN
-      END
 
 c     Cette fonction permet de remplir les diagonales de A par des matrices blocs
 c     pos : position de la diagonale (0 diag principale, 1 sur-diag, -1 sous-diag)
@@ -66,39 +50,6 @@ c	  Permet de remplir la diagonale numero D sur une matrice de taille sizeA
       END
 
 
-      SUBROUTINE top_diag(D, n, m, A)
-      IMPLICIT NONE
-      INTEGER i, j, n, m, k
-      DOUBLE PRECISION D, A
-      DIMENSION D(1000, 1000), A(1000, 1000)
-
-      DO k=1, m-1
-        DO i = 1,n
-          DO j=1,n
-            A((k-1)*n+i, k*n+j) = D(i, j)
-         ENDDO
-        ENDDO
-      ENDDO
-      RETURN
-      END
-
-      SUBROUTINE bot_diag(D, n, m, A)
-      IMPLICIT NONE
-      INTEGER i, j, n, m, k
-      DOUBLE PRECISION D, A
-      DIMENSION D(1000, 1000), A(1000, 1000)
-
-      DO k=1, m-1
-        DO i = 1,n
-          DO j=1,n
-            A(k*n+i, (k-1)*n+j) = D(i, j)
-         ENDDO
-        ENDDO
-      ENDDO
-      RETURN
-      END
-
-
 
 
 
@@ -117,6 +68,29 @@ c     RENVOIE UNE MATRICE IDENTITÉ DE TAILLE NxN
           ENDIF
         ENDDO
       ENDDO
+      RETURN
+      END
+
+c	  VERSION OPTIMISÉE DU PRODUIT MATRICE VECTEUR
+c     ON CONSIDÈRE SEULEMENT LES VALEURS NON NULLES DES DIAGONALES
+c	  On remarque que ces valeurs sont tjr comprises dans une bande de 2*k+1
+c	  où k est la taille de la matrice bloc
+c     Ce produit ne fonctionne que pour une matrice diagonale bloc
+      SUBROUTINE produit2(A, b, k,n, y)
+      IMPLICIT NONE
+      DOUBLE PRECISION A, b, y, S
+      INTEGER n,i, j, k
+      DIMENSION A(1000,1000), b(1000), y(1000)
+      DO i=1,n
+        S=0.0d0
+        DO j=1, 2*k+1
+         IF(((j-k+(i-1)).GT.0).AND.((j-k+(i-1)).LE.n)) THEN
+         	S = S + A(i, j-k+(i-1))*b(j-k+(i-1))
+         ENDIF
+        ENDDO
+        y(i) = S
+      ENDDO
+
       RETURN
       END
 
