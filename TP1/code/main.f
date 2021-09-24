@@ -5,12 +5,9 @@
       INTEGER i, j, k
 
 
-c      open(3, file='plaque_slow.dat')
-c      DO i=3,31
-c       call plaque(i, E, T)
-c       WRITE(3,*) i, E, T
-c      ENDDO
-      call plaque2(5, E, T)
+      open(3, file='data/plaque_slow.dat')
+      call plaque2(30, E, T)
+
 
       END
 
@@ -26,16 +23,16 @@ c      ENDDO
       DIMENSION Dh(1000, 1000), K(1000,1000)
 	    DOUBLE PRECISION f, S, temp, E
 	    DIMENSION f(1000)
-
+      DOUBLE PRECISION test
 
       DOUBLE PRECISION start, finish, T
+
 
 c     pas du maillage
       h = 1.d0/(n+1)
 
 
 
-c      call Identity(n, K)
       call fill_diag(0, -1.0d0/(h*h), n, K)
 
 
@@ -45,25 +42,27 @@ c	   Remplissage de la matrice Dh
       call fill_diag(1, -1.0d0/(h*h), n, Dh)
 
 c      Construction de la matrice A
-	  call fill_diag_bloc(0, Dh, n, n*n, A)
-	  call fill_diag_bloc(-1, K, n, n*n, A)
-	  call fill_diag_bloc(1, K, n, n*n, A)
+	    call fill_diag_bloc(0, Dh, n, n*n, A)
+	    call fill_diag_bloc(-1, K, n, n*n, A)
+	    call fill_diag_bloc(1, K, n, n*n, A)
 
 
+	    open(20, file='data/matrice.dat')
+	    DO i=1,n*n
+	      WRITE(20,*) A(i, 1:n*n)
+	    ENDDO
 
 
-	  DO i=1, n*n
-	   u(i) = 1.0d0
-	   f(i) = 0.0d0
-	  ENDDO
-c     (j-1)*N+i
+	    DO i=1, n*n
+	      u(i) = 1.0d0
+	      f(i) = 0.0d0
+	    ENDDO
+
+
+c     Conditions aux limites
       DO i=1,n
-        print*,n*(n-1)+i
         f(n*(n-1)+i) = 100.0d0/(h*h)
       ENDDO
-c	  DO i=n*(n-1)+1, n*n
-c	   f(i) = 100.0d0/(h*h)
-c	  ENDDO
 
 	  call cpu_time(start)
 c   Résolution par la méthode du gradient conjugué
@@ -75,22 +74,20 @@ c   Résolution par la méthode du gradient conjugué
 
 
 c 	  Enregistrement données dans un fichier texte
- 	    open(1, file='heat.dat')
-      DO i=0, n+1
-       WRITE(1, *) 0.0d0, i*h, 0.0d0
-        WRITE(1, *) 1.0d0, i*h, 0.0d0
-        WRITE(1, *) i*h, 0.0d0, 0.0d0
-        WRITE(1, *) i*h, 1.0d0, 100.0d0
-      ENDDO
- 	    DO i=1, n
- 	  	 DO j=1,n
- 	  	  WRITE(1, *) i*h, j*h, u((j-1)*N+i)
- 	  	 ENDDO
- 	    ENDDO
+ 	  open(1, file='data/heat.dat')
+c     Ecriture des valeurs imposées aux limites
 
+	  DO i=1, n
+	 	DO j=1,n
+	 	  WRITE(1, *) i*h, j*h, u((j-1)*N+i)
+	 	ENDDO
+	  ENDDO
 
 c     Affichage de la heat map avec gnuplot
-      call system("gnuplot --persist plot2d.plot")
+	  call system('gnuplot plot2d.plot')
+
+
+
 
 c	  Calcul de l'erreur quadratique moyenne
       S = 0.0d0
@@ -106,28 +103,25 @@ c	  Calcul de l'erreur quadratique moyenne
       END
 
 
-c     VERSION LENTE
   	  SUBROUTINE plaque(n, E, T)
   	  IMPLICIT NONE
-      DOUBLE PRECISION A, h, u
+      DOUBLE PRECISION A,b, h, u
       INTEGER i, j, n
       DIMENSION A(1000,1000),u(1000)
       DOUBLE PRECISION Dh, K
       DIMENSION Dh(1000, 1000), K(1000,1000)
-	  DOUBLE PRECISION f, S, temp, E
-	  DIMENSION f(1000)
-
-      DOUBLE PRECISION y1, y2, x1
-      DIMENSION y1(1000), y2(1000),x1(1000)
+	    DOUBLE PRECISION f, S, temp, E
+	    DIMENSION f(1000)
+      DOUBLE PRECISION test
 
       DOUBLE PRECISION start, finish, T
 
-c     taille du maillage
+
+c     pas du maillage
       h = 1.d0/(n+1)
 
 
 
-c      call Identity(n, K)
       call fill_diag(0, -1.0d0/(h*h), n, K)
 
 
@@ -137,19 +131,27 @@ c	   Remplissage de la matrice Dh
       call fill_diag(1, -1.0d0/(h*h), n, Dh)
 
 c      Construction de la matrice A
-	  call fill_diag_bloc(0, Dh, n, n*n, A)
-	  call fill_diag_bloc(-1, K, n, n*n, A)
-	  call fill_diag_bloc(1, K, n, n*n, A)
+	    call fill_diag_bloc(0, Dh, n, n*n, A)
+	    call fill_diag_bloc(-1, K, n, n*n, A)
+	    call fill_diag_bloc(1, K, n, n*n, A)
 
 
+	    open(20, file='data/matrice.dat')
+	    DO i=1,n*n
+	      WRITE(20,*) A(i, 1:n*n)
+	    ENDDO
 
-	  DO i=1, n*n
-	   u(i) = 1.0d0
-	   f(i) = 0.0d0
-	  ENDDO
-	  DO i=n*(n-1)+1, n*n
-	   f(i) = 100.0d0/(h*h)
-	  ENDDO
+
+	    DO i=1, n*n
+	      u(i) = 1.0d0
+	      f(i) = 0.0d0
+	    ENDDO
+
+
+c     Conditions aux limites
+      DO i=1,n
+        f(n*(n-1)+i) = 100.0d0/(h*h)
+      ENDDO
 
 	  call cpu_time(start)
 c   Résolution par la méthode du gradient conjugué
@@ -161,15 +163,31 @@ c   Résolution par la méthode du gradient conjugué
 
 
 c 	  Enregistrement données dans un fichier texte
- 	   open(1, file='heat.dat')
- 	   DO i=1, n
- 	  	DO j=1,n
- 	  	 WRITE(1, *) i*h, j*h, u((j-1)*N+i)
- 	  	ENDDO
- 	   ENDDO
+ 	  open(1, file='data/heat.dat')
+c     Ecriture des valeurs imposées aux limites
+c	  DO i=1, n
+c		WRITE(1, *) 0.0d0, i*h, 0.0d0
+c		WRITE(1, *) 1.0d0, i*h, 0.0d0
+c		WRITE(1, *) i*h, 0.0d0, 0.0d0
+c		WRITE(1, *) i*h, 1.0d0, 100.0d0
+c	  ENDDO
+c     Coins de la plaque
+c	  WRITE(1,*) 0.0d0, 1.0d0, 100.0d0
+c	  WRITE(1,*) 1.0d0, 1.0d0, 100.0d0
+c	  WRITE(1,*) 0.0d0, 0.0d0, 0.0d0
+c	  WRITE(1,*) 1.0d0, 0.0d0, 0.0d0
+
+	  DO i=1, n
+	 	DO j=1,n
+	 	  WRITE(1, *) i*h, j*h, u((j-1)*N+i)
+	 	ENDDO
+	  ENDDO
 
 c     Affichage de la heat map avec gnuplot
-C      call system("gnuplot --persist plot2d.plot")
+	  call system('gnuplot plot2d.plot')
+
+
+
 
 c	  Calcul de l'erreur quadratique moyenne
       S = 0.0d0
